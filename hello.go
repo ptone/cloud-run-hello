@@ -26,6 +26,8 @@ import (
 	"os"
 	"regexp"
 
+	bench "github.com/googlecloudplatform/cloud-run-hello/pkg/bench"
+
 	cloudevents "github.com/cloudevents/sdk-go/v2"
 	cloudeventsClient "github.com/cloudevents/sdk-go/v2/client"
 )
@@ -166,6 +168,7 @@ func main() {
 		}
 		// Default handler (hello page).
 		data.AuthenticatedEmail = r.Header.Get("X-Goog-Authenticated-User-Email") // set when behind IAP
+		bench.RunCPULoad(1, 2, 60)
 		tmpl.Execute(w, data)
 	})
 
