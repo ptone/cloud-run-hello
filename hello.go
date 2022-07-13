@@ -161,6 +161,11 @@ func main() {
 
 	eventsHandler := getEventsHandler()
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		b := bench.NewBench()
+		b.AllocMem(5)
+		defer b.FreeMem()
+		b.UseCPU()
+
 		if r.Method == http.MethodPost && r.Header.Get("ce-type") != "" {
 			// Handle cloud events.
 			eventsHandler.ServeHTTP(w, r)
@@ -168,7 +173,6 @@ func main() {
 		}
 		// Default handler (hello page).
 		data.AuthenticatedEmail = r.Header.Get("X-Goog-Authenticated-User-Email") // set when behind IAP
-		bench.RunCPULoad(1, 2, 60)
 		tmpl.Execute(w, data)
 	})
 

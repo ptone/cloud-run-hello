@@ -5,14 +5,14 @@ import (
 	"time"
 )
 
-// RunCPULoad run CPU load in specify cores count and percentage
-func RunCPULoad(coresCount int, timeSeconds int, percentage int) {
-	runtime.GOMAXPROCS(coresCount)
+func (b *Bench) UseCPU() {
+	RunCPULoad(runtime.NumCPU(), b.RequestDurationMilli, b.CPUUtilizationPercent)
+	return
+}
 
-	// second     ,s  * 1
-	// millisecond,ms * 1000
-	// microsecond,μs * 1000 * 1000
-	// nanosecond ,ns * 1000 * 1000 * 1000
+// RunCPULoad run CPU load in specify cores count and percentage
+func RunCPULoad(coresCount int, timeMilliSecond int, percentage int) {
+	runtime.GOMAXPROCS(coresCount)
 
 	// every loop : run + sleep = 1 unit
 
@@ -38,5 +38,5 @@ func RunCPULoad(coresCount int, timeSeconds int, percentage int) {
 		}()
 	}
 	// how long
-	time.Sleep(time.Duration(timeSeconds) * time.Second)
+	time.Sleep(time.Duration(timeMilliSecond) * time.Millisecond)
 }
